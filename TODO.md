@@ -2,7 +2,7 @@
 
 ## 0. System Metadata
 
-- **Current Max ID**: `Next ID No: 9` (タスク追加時にインクリメント必須)
+- **Current Max ID**: `Next ID No: 13` (タスク追加時にインクリメント必須)
 - **ID Source of Truth**: このファイルの `Next ID No` 行が、全プロジェクトにおける唯一の ID 発番元である。
 
 ## 1. Task Lifecycle (State Machine)
@@ -407,6 +407,60 @@ Risk の詳細は `_docs/standards/quality_assurance.md` を参照する。
 - **QA**: None
 - **Verification**: None
 
+### Lang-Chore-11: [Chore] Discord bot 手書き演習 Phase A（観察目的）
+
+- **Title**: [Chore] Discord bot 手書き演習 Phase A（観察目的）
+- **ID**: Lang-Chore-11
+- **Priority**: P2
+- **Size**: S
+- **Risk**: Low
+- **Area**: Lang
+- **Dependencies**: []
+- **Goal**: 設計メモ §7「その後 1」に基づき、`!ping` → `pong` ハンドラ関数 1 つを koto で手書きし、書き味の違和感・spec の欠落を観察ノートに記録する。動作させることは目的としない。
+- **Acceptance Criteria**:
+  - AC-001: `_docs/draft/Lang/discord-bot-handwrite/handler.koto` に Phase A 課題のハンドラ関数が手書きされている。
+  - AC-002: `_docs/draft/Lang/discord-bot-handwrite/notes.md` の Observations / Spec gaps surfaced セクションに、書きながら気付いた違和感・未定義箇所が記録されている。
+  - AC-003: ノート末尾の Decision after Phase A セクションが、Phase B 進行 / spec 改訂 / parser 着手のいずれかに対する判断で埋まっている。
+- **Steps**:
+  1. [ ] ユーザーが handler.koto に Phase A の課題を手書きする
+  2. [ ] 詰まった箇所・違和感を Observations に追記する
+  3. [ ] spec 未定義の箇所を Spec gaps surfaced に追記する
+  4. [ ] Decision after Phase A セクションで次の進路を決める
+- **Description**:
+  - Context: 設計メモ §1 の主目的「思考フレームへの作用の観察」を実コードで行う最初の試み。動かないコードを書くことで、grammar や spec の不足を炙り出す。
+  - Notes: `Size S` かつ `Risk Low` のため Plan / Intent / QA は不要。ただし観察ログは draft notes に必ず残す（draft notes 自体が成果物）。
+- **Plan**: None
+- **Intent**: None
+- **QA**: None
+- **Verification**: None
+
+### Lang-Chore-12: [Chore] Discord bot 手書き演習 Phase B（dispatcher 題材）
+
+- **Title**: [Chore] Discord bot 手書き演習 Phase B（dispatcher 題材）
+- **ID**: Lang-Chore-12
+- **Priority**: P2
+- **Size**: S
+- **Risk**: Low
+- **Area**: Lang
+- **Dependencies**: [Lang-Chore-11]
+- **Goal**: Discord bot の dispatcher（`!ping` / `!echo X` / `!time` の 3 コマンドを受けて応答する）を koto で手書きし、Phase A 拡張で残った spec gap（文字列操作・パターン分岐・predicate 関数の shape・コメント構文・辞書リテラル等）が実例で表面化することを観察する。動作させることは目的としない。
+- **Acceptance Criteria**:
+  - AC-001: `_docs/draft/Lang/discord-bot-handwrite/sample-2.koto` に dispatcher のハンドラ関数が手書きされている。
+  - AC-002: `_docs/draft/Lang/discord-bot-handwrite/notes.md` の Observations / 条件式・Optional 関連 / Phase A 拡張で表面化 セクションに、書きながら気付いた違和感・未定義箇所が追記されている。
+  - AC-003: Decision after Phase B セクション（または既存の Decision after Phase A を更新）で、次の進路（spec 改訂 / parser 着手 / さらなる演習）に対する判断が記録されている。
+- **Steps**:
+  1. [ ] ユーザーが sample-2.koto に dispatcher を手書きする
+  2. [ ] 詰まった箇所・違和感を notes.md に追記する
+  3. [ ] spec 未定義の箇所を notes.md の未決着論点に追記する
+  4. [ ] Decision セクションで次の進路を決める
+- **Description**:
+  - Context: Phase A 拡張で確定した spec（句読点ルール、`である` copula、grouping 不採用、`〜？` Optional 等）を踏まえて、新しい題材で書き味を観察する。文字列分割・パターン分岐・predicate 関数等、Phase A では触れなかった要素を意図的にカバー。
+  - Notes: `Size S` かつ `Risk Low` のため Plan / Intent / QA は不要。観察ログは draft notes に蓄積する。
+- **Plan**: None
+- **Intent**: None
+- **QA**: None
+- **Verification**: None
+
 ---
 
 ## Ready
@@ -414,3 +468,4 @@ Risk の詳細は `_docs/standards/quality_assurance.md` を参照する。
 ---
 
 ## In Progress
+

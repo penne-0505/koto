@@ -1,0 +1,295 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "koto",
+  "scopeName": "source.koto",
+  "fileTypes": ["koto"],
+  "patterns": [
+    { "include": "#strings" },
+    { "include": "#numerics" },
+    { "include": "#literals" },
+    { "include": "#keywords-multi" },
+    { "include": "#modifiers" },
+    { "include": "#storage-types" },
+    { "include": "#keywords-control" },
+    { "include": "#entity-names" },
+    { "include": "#particles" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "strings": {
+      "name": "string.quoted.other.koto",
+      "begin": "「",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.koto" }
+      },
+      "end": "」",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.koto" }
+      },
+      "comment": "鉤括弧で囲まれた文字列リテラル。エスケープ仕様が未確定のため内部にパターンを再帰させず、内側の字列をハイライト対象にしない。"
+    },
+
+    "numerics": {
+      "match": "(?<=^|[　。、（）「」])[0-9]+(?![0-9])",
+      "name": "constant.numeric.decimal.koto",
+      "comment": "算用数字のみ。前は語境界、後ろは非数字を要件にし、識別子に含まれる連続数字の途中マッチを防ぐ。漢数字はリテラルにしない。`1番目の要素` のような固定句では後続が数字以外なら 1 が単独マッチする。"
+    },
+
+    "literals": {
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])真(?=$|[　。、（）「」])",
+          "name": "constant.language.boolean.true.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])偽(?=$|[　。、（）「」])",
+          "name": "constant.language.boolean.false.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])無し(?=$|[　。、（）「」])",
+          "name": "constant.language.null.koto"
+        }
+      ]
+    },
+
+    "keywords-multi": {
+      "comment": "2 文字以上のキーワードをまとめる。Oniguruma は include 順とパターン配列順の両方を尊重するため、ここでは長い語を先頭に置く（`を返す` を `返す` より先、`として終える` を `として` より先）。",
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])として終える(?=$|[　。、（）「」])",
+          "name": "keyword.control.throw.koto",
+          "comment": "throw 相当。`返す` (return) と動詞を変え、終了経路の質的な差を示す。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])繰り返すと(?=$|[　。、（）「」])",
+          "name": "keyword.control.loop.koto",
+          "comment": "繰り返し本体の開始マーカー。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])のいずれか(?=$|[　。、（）「」])",
+          "name": "keyword.operator.type.enum.koto",
+          "comment": "列挙型定義の末尾マーカー。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])を受け取る(?=$|[　。、（）「」])",
+          "name": "keyword.operator.signature.parameter.koto",
+          "comment": "関数シグネチャの引数マーカー。`を` (particle) + `受け取る` (verb) が結合した固定句。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])そのもの(?=$|[　。、（）「」])",
+          "name": "keyword.operator.equality.identity.koto",
+          "comment": "同一インスタンス等価 (`is`)。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])して待つ(?=$|[　。、（）「」])",
+          "name": "keyword.control.async.await.koto",
+          "comment": "await 相当。て形 + `待つ` で動作の連続を表す。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])取り込む(?=$|[　。、（）「」])",
+          "name": "keyword.control.import.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])からなる(?=$|[　。、（）「」])",
+          "name": "keyword.operator.type.struct.koto",
+          "comment": "オブジェクト型定義の末尾マーカー。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])と同じ(?=$|[　。、（）「」])",
+          "name": "keyword.operator.equality.value.koto",
+          "comment": "値として等価 (`==`)。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])と同種(?=$|[　。、（）「」])",
+          "name": "keyword.operator.equality.type.koto",
+          "comment": "同一型 (`type(a) == type(b)`)。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])として(?=$|[　。、（）「」])",
+          "name": "keyword.operator.declaration.as.koto",
+          "comment": "宣言マーカー。`関数 として`、`定数 として` 等。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])である(?=$|[　。、（）「」])",
+          "name": "keyword.operator.type-annotation.koto",
+          "comment": "型注釈と繰り返し本体終端の両用。文脈別の意味づけは LSP で扱う。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])を返す(?=$|[　。、（）「」])",
+          "name": "keyword.operator.signature.return.koto",
+          "comment": "関数シグネチャの戻り値マーカー。return 文の `を 返す` とは分かち書きで区別される。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])とする(?=$|[　。、（）「」])",
+          "name": "keyword.operator.assignment.koto",
+          "comment": "値束縛 (`〜 を 〜 とする`)。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])返す(?=$|[　。、（）「」])",
+          "name": "keyword.control.return.koto",
+          "comment": "return 文の動詞単独形。`を 返す` の `を` は別途 particle として扱う。"
+        }
+      ]
+    },
+
+    "modifiers": {
+      "comment": "宣言の頭に積み重ねる修飾語。分かち書きで前置される。",
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])非同期(?=$|[　。、（）「」])",
+          "name": "storage.modifier.async.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])公開(?=$|[　。、（）「」])",
+          "name": "storage.modifier.public.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])外部(?=$|[　。、（）「」])",
+          "name": "storage.modifier.external.koto"
+        }
+      ]
+    },
+
+    "storage-types": {
+      "comment": "宣言される実体の種類。`関数 として` `オブジェクト として` `可変 として` 等で `として` と組み合わせて使う。",
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])オブジェクト(?=$|[　。、（）「」])",
+          "name": "storage.type.object.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])関数(?=$|[　。、（）「」])",
+          "name": "storage.type.function.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])定数(?=$|[　。、（）「」])",
+          "name": "storage.type.constant.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])可変(?=$|[　。、（）「」])",
+          "name": "storage.type.mutable.koto"
+        }
+      ]
+    },
+
+    "keywords-control": {
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])もし(?=$|[　。、（）「」])",
+          "name": "keyword.control.conditional.if.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])なら(?=$|[　。、（）「」])",
+          "name": "keyword.control.conditional.then.koto"
+        }
+      ]
+    },
+
+    "particles": {
+      "comment": "助詞は意味役割を運ぶ。語境界要件は厳格に保ち、識別子の一部としての同字を誤マッチしない。`から` は 2 文字なので単文字助詞より先に配置する。",
+      "patterns": [
+        {
+          "match": "(?<=^|[　。、（）「」])から(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.source.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])の(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.possession.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])が(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.subject.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])に(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.target.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])を(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.object.koto"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])で(?=$|[　。、（）「」])",
+          "name": "keyword.operator.particle.means.koto"
+        }
+      ]
+    },
+
+    "entity-names": {
+      "comment": "識別子の文脈分類。関数名・型名・パラメータ名・変数名を別 scope で着色する。LSP なしのパターン解析のみで届く範囲に限定（intent INV-005）。specificity 降順に並べ、より特定的なパターンを先に評価する（intent INV-002）。すべてのパターンに語境界要件を持たせる（intent INV-003）。",
+      "patterns": [
+        {
+          "match": "(?<=オブジェクト　として　)([^　。、（）「」]+)(?=　は[、。])",
+          "name": "entity.name.type.koto",
+          "comment": "オブジェクト型宣言名: `オブジェクト　として　[X]　は[、。]` の X。fixed-length lookbehind (10 chars)。下の汎用 `[X]　は[、。]` パターンより先に match させて、object decl を type 扱いにする。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])([^　。、（）「」]+)(?=（)",
+          "name": "entity.name.function.koto",
+          "comment": "関数／コンストラクタ呼び出し: `[X]（`。`タスク（…）` のような型コンストラクタも同 scope に寄せる（callable の共通性）。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])([^　。、（）「」]+)(?=　は[、。])",
+          "name": "entity.name.function.koto",
+          "comment": "関数宣言名 (fallback): `[X]　は[、。]`。`関数 として ... 最大値 は、` 等。`オブジェクト として ... タスク は、` は上のパターンが先に拾う。"
+        },
+        {
+          "match": "(?<=である　)([^　。、（）「」]+)(?=　を受け取る)",
+          "name": "variable.parameter.koto",
+          "comment": "パラメータ名: `である　[X]　を受け取る`。`を受け取る` は `を` の後に空白を持たないため、下の変数束縛パターンと曖昧性なく分かれる。"
+        },
+        {
+          "match": "(?<=である　)([^　。、（）「」]+)(?=　を　)",
+          "name": "variable.other.koto",
+          "comment": "変数束縛名 (構造 A): `である　[X]　を　[VALUE]　とする`。`を` の後に空白を要求して `を受け取る` を排除する。"
+        },
+        {
+          "match": "(?<=である　)([^　。、（）「」]+)(?=　とする)",
+          "name": "variable.other.koto",
+          "comment": "変数束縛名 (構造 B): `[VALUE]　を　[TYPE]　である　[X]　とする`。語順自由により VALUE が前置されるケースを拾う（§ 3-1）。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])([^　。、（）「」]+)(?=　である)",
+          "name": "entity.name.type.koto",
+          "comment": "型注釈前: `[X]　である`。関数シグネチャ・変数宣言・オブジェクトのフィールドで使われる型注釈の型名を拾う。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])([^　。、（）「」]+)(?=　を返す)",
+          "name": "entity.name.type.koto",
+          "comment": "戻り値型: `[X]　を返す`。`を返す` は関数シグネチャ専用マーカーなので、その前にある識別子は戻り値型と確定できる。"
+        },
+        {
+          "match": "(?<=^|[　。、（）「」])([^　。、（）「」]*(?:配列|集合|辞書))(?=$|[　。、（）「」])",
+          "name": "entity.name.type.koto",
+          "comment": "組み込み型サフィックス: `〜配列` / `〜集合` / `〜辞書`。`空配列` 等のリテラル的識別子も型色になるが、視覚上『集合的なもの』と理解できるため許容（intent Consequences 参照）。"
+        },
+        {
+          "match": "(?<=）　を　)([^　。、（）「」]+)(?=　とする)",
+          "name": "variable.other.koto",
+          "comment": "変数束縛名 (構造 C, 型推論): `[CONSTRUCTOR_OR_CALL]（…）　を　[X]　とする`。型推論ケースのうち、関数／コンストラクタ呼び出し直後の束縛に限定。lookbehind に `）` を要求し、再代入文（`現在の最大　を　今の数　とする`）の値部分への誤検出を防ぐ。type_suffix より後に置くため、`空配列` 等の suffix-typed リテラルは type 側が先に勝つ。"
+        }
+      ]
+    },
+
+    "punctuation": {
+      "patterns": [
+        {
+          "match": "。",
+          "name": "punctuation.terminator.statement.koto"
+        },
+        {
+          "match": "、",
+          "name": "punctuation.separator.koto"
+        },
+        {
+          "match": "（",
+          "name": "punctuation.section.parens.begin.koto"
+        },
+        {
+          "match": "）",
+          "name": "punctuation.section.parens.end.koto"
+        }
+      ]
+    }
+  }
+}

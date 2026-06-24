@@ -1,0 +1,38 @@
+{
+  "name": "vscode-koto",
+  "displayName": "koto syntax",
+  "description": "Syntax highlighting for the koto Japanese-driven programming language.",
+  "version": "0.1.0",
+  "publisher": "koto-internal",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "koto",
+        "aliases": ["koto", "Koto"],
+        "extensions": [".koto"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "koto",
+        "scopeName": "source.koto",
+        "path": "./syntaxes/koto.tmLanguage.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[koto]": {
+        "editor.unicodeHighlight.invisibleCharacters": false,
+        "editor.unicodeHighlight.ambiguousCharacters": false,
+        "editor.unicodeHighlight.nonBasicASCII": false,
+        "editor.renderWhitespace": "none"
+      }
+    }
+  }
+}
