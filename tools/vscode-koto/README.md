@@ -28,6 +28,33 @@ koto 言語の VSCode 用シンタックスハイライト拡張。`tools/vscode
 
 スコープ名の詳細は [`syntaxes/koto.tmLanguage.json`](./syntaxes/koto.tmLanguage.json) を参照。
 
+### v3: Phase B 確定構文のハイライト追加
+
+Phase B 手書き演習 (Lang-Chore-12) で確定した新 keyword 群を追加。
+
+| 追加カテゴリ | キーワード / 記号 | scope |
+|---|---|---|
+| 比較演算 | `より大きい` / `より小さい` / `以上` / `以下` / `と異なる` | `keyword.operator.comparison.*.koto` / `keyword.operator.equality.not-equal.koto` |
+| 論理結合 | `かつ` / `または` / `ではない` | `keyword.operator.logical.{and,or,not}.koto` |
+| 制御 (新) | `について` (match opener) / `について繰り返すと` (loop compound) / `何もしない` (no-op) / `で終える` (異常終了 explicit) | `keyword.control.{match,loop,noop,throw}.koto` |
+| パラメータ (連用形) | `を受け取り` | `keyword.operator.signature.parameter.koto` (`を受け取る` と同 scope) |
+| 集合 | `に含まれる` | `keyword.operator.set.contains.koto` |
+| 終了型 (built-in) | `例外` / `警告` / `通知` | `support.type.builtin.terminal.{exception,warning,notice}.koto` |
+| 型 postfix Optional | `？` | `keyword.operator.optional.koto` |
+| 列挙記号 | 中点 `・` | `punctuation.separator.list.koto` |
+
+設計メモ §3-19〜§3-26 の Phase B 確定事項に対応する。v1 / v2 の既存パターンに regression なし (boundary 要件を維持、既存スコープを退行させない)。
+
+v3 では Phase B canonical の **tab indent** に合わせ、全パターンの語境界要件に `\t` を追加 (`(?<=^|[　。、（）「」\t])`)。tab 直後の keyword (`\tもし` 等) も正しくハイライトされる。
+
+v3.1 amendment:
+
+- `を返す` の scope を `keyword.operator.signature.return.koto` → **`keyword.control.return.koto`** に変更。`return` 相当の制御フローとして theme 側で control 色 (typically pink) が当たるようにする。`返す` 単独形と同 scope に揃える
+- `である` を 2 つの scope に分割:
+  - `である` + `。` (関数本体終端、`end` 相当) → **`keyword.control.end.koto`** (control 色、pink)
+  - `である` + 全角 space / 他境界 (型注釈マーカー) → 既存の `keyword.operator.type-annotation.koto` (operator 色)
+- entity-names の identifier 捕捉パターンから `\t` を除外 (`[^　。、（）「」\t]+`)。tab を識別子の一部として誤捕捉しないようにする
+
 ### v2: 識別子の文脈別着色
 
 v2 では識別子も文脈に応じて別 scope で着色する。パーサ／LSP なしで TextMate Grammar のパターンマッチのみで到達できる範囲に限定（intent v2 INV-005）。
@@ -48,16 +75,34 @@ v2 範囲外（LSP 待ち）:
 
 ## エディタ既定設定
 
-`.koto` ファイルに対して、以下の VSCode 既定設定を抑制している（`contributes.configurationDefaults` で `[koto]` スコープに適用）。
+`.koto` ファイルに対して、以下の VSCode 既定設定を `contributes.configurationDefaults` で `[koto]` スコープに適用する。`.koto` 以外のファイルには影響しない。
+
+### 全角スペース・全角記号の警告抑制
 
 - `editor.unicodeHighlight.invisibleCharacters: false`
 - `editor.unicodeHighlight.ambiguousCharacters: false`
 - `editor.unicodeHighlight.nonBasicASCII: false`
 - `editor.renderWhitespace: "none"`
 
-koto は分かち書き＝全角スペース U+3000 を構文の主軸に据える。VSCode の既定は U+3000 を「不可視文字」として警告し、`renderWhitespace` の既定値も全角スペースを中点風の記号で可視化するが、本言語ではすべての行に多数登場する正規構文要素であり、ノイズが大きい。同様に全角丸括弧・句読点・鉤括弧などの全角記号も `ambiguousCharacters` / `nonBasicASCII` に該当しうるため、まとめて抑制する。`.koto` 以外のファイルには影響しない。
+koto は分かち書き＝全角スペース U+3000 を構文の主軸に据える。VSCode の既定は U+3000 を「不可視文字」として警告し、`renderWhitespace` の既定値も全角スペースを中点風の記号で可視化するが、本言語ではすべての行に多数登場する正規構文要素であり、ノイズが大きい。同様に全角丸括弧・句読点・鉤括弧などの全角記号も `ambiguousCharacters` / `nonBasicASCII` に該当しうるため、まとめて抑制する。
 
 全角スペースを視覚的に確認したくなった場合は、ユーザー側の settings で `[koto]` スコープを上書きする（`editor.renderWhitespace` を `boundary` 等に戻す）。
+
+### インデント・空白保持 (Phase B 確定事項)
+
+- `editor.insertSpaces: false` — インデントは tab 文字を使う
+- `editor.detectIndentation: false` — 既存ファイルからの自動検出を無効化（tab で固定）
+- `editor.tabSize: 4` — tab を 4 文字幅で render
+- `files.trimTrailingWhitespace: false` — 行末の trailing whitespace を保存時に削除しない
+
+koto では文字種で 2 つの役割を分離する:
+
+- **全角スペース U+3000** = token separator（唯一の正式な token 区切り）
+- **tab 文字** = indent（視覚レイアウト、semantic な役割なし）
+
+trailing 全角 space は token 区切りとして意味を持つため、editor の「行末空白削除」機能で消されると syntax 上の意味が変わってしまう。これを防ぐため `files.trimTrailingWhitespace: false` を必須に設定する（多くの editor の trailing whitespace 削除は ASCII space 専用だが、念のため明示的に無効化）。
+
+`editor.tabSize` の幅 (4) は表示の好みなので、ユーザー側 settings で `[koto]` スコープを上書きして変更してよい。
 
 ## 全角スペース可視化フォントとの相性
 

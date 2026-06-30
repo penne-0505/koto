@@ -31,7 +31,11 @@
         "editor.unicodeHighlight.invisibleCharacters": false,
         "editor.unicodeHighlight.ambiguousCharacters": false,
         "editor.unicodeHighlight.nonBasicASCII": false,
-        "editor.renderWhitespace": "none"
+        "editor.renderWhitespace": "none",
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 4,
+        "files.trimTrailingWhitespace": false
       }
     }
   }
