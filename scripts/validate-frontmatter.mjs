@@ -24,6 +24,13 @@ const REQUIRED_KEYS = [
   "related_issues",
   "related_prs",
 ];
+const REQUIRED_SCALARS = [
+  "title",
+  "status",
+  "draft_status",
+  "created_at",
+  "updated_at",
+];
 const STATUS_VALUES = ["proposed", "active", "superseded", "obsolete"];
 const DRAFT_STATUS_VALUES = ["idea", "exploring", "paused", "n/a"];
 
@@ -54,6 +61,8 @@ const isInArchives = (path) =>
   normalizePath(path).split("/").includes("archives");
 const isDraftPath = (path) => normalizePath(path).split("/").includes("draft");
 const isQaPath = (path) => normalizePath(path).split("/").includes("qa");
+const isIntentPath = (path) =>
+  normalizePath(path).split("/").includes("intent");
 const isInStandards = (path) =>
   normalizePath(path).split("/").includes("standards");
 
@@ -203,13 +212,21 @@ const run = async () => {
         fileErrors.push(`missing required field: ${key}`);
       }
     }
+    for (const key of REQUIRED_SCALARS) {
+      if (
+        key in data &&
+        (typeof data[key] !== "string" || data[key].trim() === "")
+      ) {
+        fileErrors.push(`required field must be a non-empty string: ${key}`);
+      }
+    }
 
     const status = data.status;
     const draftStatus = data.draft_status;
-    if (status && !STATUS_VALUES.includes(status)) {
+    if ("status" in data && !STATUS_VALUES.includes(status)) {
       fileErrors.push(`status must be one of ${STATUS_VALUES.join(", ")}`);
     }
-    if (draftStatus && !DRAFT_STATUS_VALUES.includes(draftStatus)) {
+    if ("draft_status" in data && !DRAFT_STATUS_VALUES.includes(draftStatus)) {
       fileErrors.push(
         `draft_status must be one of ${DRAFT_STATUS_VALUES.join(", ")}`,
       );
@@ -313,6 +330,8 @@ const run = async () => {
       if (
         !REQUIRED_KEYS.includes(key) &&
         !(isQaPath(file) && ["qa_status", "risk"].includes(key)) &&
+        !(isQaPath(file) && key === "qa_schema") &&
+        !(isIntentPath(file) && key === "intent_schema") &&
         !key.startsWith("stale_exempt") &&
         key !== "stale_extensions"
       ) {

@@ -31,7 +31,7 @@ koto は構文が固定の助詞・キーワードで囲まれているため、
 2. 関数／コンストラクタ呼び出し: `[X]（` の X → `entity.name.function.koto`
 3. 関数宣言名: `[X]　は[、。]` の X（fallback。1 でカバーされない場合） → `entity.name.function.koto`
 4. パラメータ名: `である　[X]　を受け取る` の X → `variable.parameter.koto`
-5. 変数束縛名: `である　[X]　を　` の X → `variable.other.koto`
+5. 変数束縛名: `である`　`[X]`　`を`　の X → `variable.other.koto`
 6. 型注釈前: `[X]　である` の X → `entity.name.type.koto`
 7. 戻り値型: `[X]　を返す` の X → `entity.name.type.koto`
 8. 組み込み型サフィックス: `…(配列|集合|辞書)` → `entity.name.type.koto`

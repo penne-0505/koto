@@ -33,7 +33,7 @@ related_prs: []
 - AC-004: `[X]　を返す` の X が `entity.name.type.koto` で着色される。
 - AC-005: `〜配列` / `〜集合` / `〜辞書` で終わる識別子が `entity.name.type.koto` で着色される。
 - AC-006: `である　[X]　を受け取る` の X が `variable.parameter.koto` で着色される。
-- AC-007: `である　[X]　を　` の X が `variable.other.koto` で着色される。
+- AC-007: `である`　`[X]`　`を`　の X が `variable.other.koto` で着色される。
 - AC-008: `オブジェクト　として　[X]　は[、。]` の X が `entity.name.type.koto` で着色される（AC-001 より specificity が高く優先される）。
 - AC-009: v2 範囲外（フィールドアクセス `〜の[X]`、メソッド呼び出し `〜の[X]（`、列挙値参照 `〜が[X]と同じ`）の `[X]` は識別子色のまま（着色されない）。
 

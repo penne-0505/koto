@@ -131,8 +131,8 @@ Regression (corrected logic, v1/v2 keywords across 5 existing fixtures): 26/26 P
 | --- | --- | --- |
 | INV-001 | PASS | 追加した 19 種は memo §3-19〜§3-26 で確定したもののみ。memo に無いコメント構文 (`＃`)、`空である` 述語、user 定義 終了型 marker 等は追加していない |
 | INV-002 | PASS | AC-002 と同じ根拠 (regression なし) |
-| INV-003 | PASS | half-width-boundary.koto で新規パターンも boundary 違反で発火しないことを regression test で確認 (multi-char keyword は全部 `(?<=^|[　。、（）「」])...(?=$|[　。、（）「」])` 形) |
-| INV-004 | PASS | 新規 multi-char パターン (14 個 in keywords-multi、3 個 in terminal-types) すべてに `(?<=^|[　。、（）「」])` lookbehind + `(?=$|[　。、（）「」])` lookahead あり。1 文字 operator `？` / `・` は context-free に発火 (INV-004 例外として明記) |
+| INV-003 | PASS | half-width-boundary.koto で新規パターンも boundary 違反で発火しないことを regression test で確認 (multi-char keyword は全部 `(?<=^\|[　。、（）「」])...(?=$\|[　。、（）「」])` 形) |
+| INV-004 | PASS | 新規 multi-char パターン (14 個 in keywords-multi、3 個 in terminal-types) すべてに `(?<=^\|[　。、（）「」])` lookbehind + `(?=$\|[　。、（）「」])` lookahead あり。1 文字 operator `？` / `・` は context-free に発火 (INV-004 例外として明記) |
 | INV-005 | PASS | `keywords-multi.patterns` 配列で `について繰り返すと` (5 chars effective + lookarounds) が `について` (4 chars) より先 |
 | INV-006 | PASS | 既存 scope を再利用: `keyword.control.throw.koto` (`として終える` + `で終える` 共有)、`keyword.control.loop.koto` (`繰り返すと` + `について繰り返すと` 共有)、`keyword.operator.signature.parameter.koto` (`を受け取る` + `を受け取り` 共有)。新規 scope は必要最小限 |
 
