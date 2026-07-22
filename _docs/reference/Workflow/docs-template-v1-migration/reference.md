@@ -191,7 +191,7 @@ Template finalization records, frontend-design skill, and jj workflow were alrea
 
 ## Migration-created artifact ledger
 
-The B/U/P union above covers 130 paths. The following six migration-created artifacts and the eight project-local compatibility records below complete final-diff coverage; a read-only closure check compares their union with the final P diff and requires zero unclassified paths.
+The B/U/P union above covers 130 paths. The following six migration-created artifacts and the nine project-local compatibility records below complete final-diff coverage; a read-only closure check compares their union with the final P diff and requires zero unclassified paths.
 
 | Path | Purpose | Final state |
 | --- | --- | --- |
@@ -204,7 +204,7 @@ The B/U/P union above covers 130 paths. The following six migration-created arti
 
 ## Project-local Markdownlint compatibility ledger
 
-These eight paths were unchanged in the B/U/P tree but must be presentation-adjusted because the v1 CI lints the full non-archive Markdown scope. The support horizon is the lifetime of the named Koto tab/global-ID representations or the relevant Markdown rule; the directives are exact-file and no directory/config exclusion was added.
+The first eight paths were unchanged in the B/U/P tree but required presentation adjustment because the v1 CI lints the full non-archive Markdown scope. The ninth path was a post-push baseline CI closure: it resolved a remaining MD038 in existing Koto project documentation without changing the grammar decision. The support horizon is the lifetime of the named Koto tab/global-ID representations or the relevant Markdown rule; the directives are exact-file and no directory/config exclusion was added.
 
 | Path | Findings before | Remedy | Semantic preservation |
 | --- | --- | --- | --- |
@@ -216,5 +216,6 @@ These eight paths were unchanged in the B/U/P tree but must be presentation-adju
 | `_docs/plan/Tooling/vscode-koto-grammar-v2/plan.md` | MD038 ×1 | code-span boundary correction | Koto spacing representation unchanged |
 | `_docs/qa/Tooling/vscode-koto-grammar-v2/test-plan.md` | MD038 ×1 | code-span boundary correction | QA expectation unchanged |
 | `_docs/qa/Tooling/vscode-koto-grammar-v3/verification.md` | MD056 ×2 | escaped regex table pipes | verification evidence unchanged |
+| `_docs/intent/Tooling/vscode-koto-grammar/decision.md` | MD038 ×1 | replace the inline full-width-space sample with `Unicode U+3000` | grammar decision and later literal-regex example unchanged |
 
 `TODO.md` held a temporary migration task during execution. After PASS it is removed and `Next ID No` returns to the checkpoint value; only the three pathwise schema-v2 workflow rule merges remain in its final diff.
