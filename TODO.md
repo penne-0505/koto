@@ -2,7 +2,7 @@
 
 ## 0. System Metadata
 
-- **Current Max ID**: `Next ID No: 16` (タスク追加時にインクリメント必須)
+- **Current Max ID**: `Next ID No: 17` (タスク追加時にインクリメント必須)
 - **ID Source of Truth**: このファイルの `Next ID No` 行が、全プロジェクトにおける唯一の ID 発番元である。
 
 ## 1. Task Lifecycle (State Machine)
@@ -306,31 +306,6 @@ Risk の詳細は `_docs/standards/quality_assurance.md` を参照する。
 
 ## Backlog
 
-### Docs-Chore-1: [Chore] Review and customize AGENTS.md
-
-- **Title**: [Chore] Review and customize AGENTS.md
-- **ID**: Docs-Chore-1
-- **Priority**: P2
-- **Size**: XS
-- **Risk**: Low
-- **Area**: Docs
-- **Dependencies**: []
-- **Goal**: `AGENTS.md` がプロジェクトのニーズに応じて必要に応じて編集されている。
-- **Acceptance Criteria**:
-  - AC-001: `AGENTS.md` の禁止事項、実行環境、推奨コマンドがプロジェクト実態に合っている。
-  - AC-002: 外部入力、secret、破壊的操作の扱いがプロジェクトの安全基準と矛盾していない。
-- **Steps**:
-  1. [ ] `AGENTS.md` を開き、既存の内容を確認する
-  2. [ ] 必要に応じてプロジェクト固有のコマンドや禁止事項を追記する
-  3. [ ] 変更後にリンクと安全基準の整合性を確認する
-- **Description**:
-  - Context: 新規プロジェクト作成直後に agent 向け入口を調整する。
-  - Notes: `Size XS` かつ `Risk Low` のため Plan / Intent / QA は不要。
-- **Plan**: None
-- **Intent**: None
-- **QA**: None
-- **Verification**: None
-
 ### Docs-Chore-2: [Chore] Customize README.md for project
 
 - **Title**: [Chore] Customize README.md for project
@@ -357,26 +332,28 @@ Risk の詳細は `_docs/standards/quality_assurance.md` を参照する。
 - **QA**: None
 - **Verification**: None
 
-### Docs-Chore-3: [Chore] Update LICENSE.txt author attribution
+### Lang-Chore-16: [Chore] Discord bot 手書き演習 Phase C (リマインダー題材)
 
-- **Title**: [Chore] Update LICENSE.txt author attribution
-- **ID**: Docs-Chore-3
+- **Title**: [Chore] Discord bot 手書き演習 Phase C (リマインダー題材)
+- **ID**: Lang-Chore-16
 - **Priority**: P2
-- **Size**: XS
+- **Size**: S
 - **Risk**: Low
-- **Area**: Docs
+- **Area**: Lang
 - **Dependencies**: []
-- **Goal**: `LICENSE.txt` の著作者名が正しいものに編集されている。
+- **Goal**: Phase A/B で memo §3-1〜§3-26 に統合された spec を、時間・永続化・catch 需要を含む新題材 (リマインダー bot) で手書きし、初回運用テスト + memo §5 未決着論点で実際に詰まる箇所を炙り出す。動作させることは目的としない。
 - **Acceptance Criteria**:
-  - AC-001: `LICENSE.txt` の著作者表示がプロジェクトの権利者に更新されている。
-  - AC-002: README のライセンスリンクが `LICENSE.txt` を参照している。
+  - AC-001: `_docs/draft/Lang/discord-bot-reminder/reminder.koto` にリマインダー bot の関数群 (予約 / 一覧 / キャンセル / 期日到来検出、計 4〜5 関数) が手書きされている
+  - AC-002: `_docs/draft/Lang/discord-bot-reminder/notes.md` の Observations に書きながら気付いた違和感・未定義箇所・memo §5 で詰まった具体シナリオが記録されている
+  - AC-003: Decision after Phase C セクションで、memo §5 のどの論点から詰めるか (Phase B → B) or 直接 parser 着手 (Phase B → A) の判断が記録されている
 - **Steps**:
-  1. [ ] `LICENSE.txt` を開き、著作者名を確認する
-  2. [ ] 正しい著作者名に編集する
-  3. [ ] README のライセンスリンクを確認する
+  1. [ ] ユーザーが reminder.koto にリマインダー bot 関数群を手書きする
+  2. [ ] 詰まった箇所・違和感を notes.md Observations に追記する
+  3. [ ] memo §5 で実際に詰まった論点を identify する
+  4. [ ] Decision after Phase C セクションで次の進路を決める
 - **Description**:
-  - Context: OSS 配布前に著作者表示をプロジェクトに合わせる。
-  - Notes: `Size XS` かつ `Risk Low` のため Plan / Intent / QA は不要。
+  - Context: Phase C 演習として、Phase A/B とは異なる axis (時間・辞書 literal・catch) を扱う題材で spec の初回運用テストを行う。memo §5 の 21 項目のうち、具体シナリオで浮上するものを優先度付けする材料にする。
+  - Notes: `Size S` かつ `Risk Low` のため Plan / Intent / QA は不要。観察ログは draft notes に蓄積する。
 - **Plan**: None
 - **Intent**: None
 - **QA**: None
